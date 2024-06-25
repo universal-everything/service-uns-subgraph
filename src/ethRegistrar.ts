@@ -41,7 +41,7 @@ export function handleNameRegistered(event: NameRegisteredEvent): void {
   let account = new Account(event.params.owner.toHex());
   account.save();
 
-  let label = uint256ToByteArray(event.params.id);
+  let label = event.params.id;
   let registration = new Registration(label.toHex());
   let domain = Domain.load(crypto.keccak256(concat(rootNode, label)).toHex())!;
 
@@ -53,12 +53,12 @@ export function handleNameRegistered(event: NameRegisteredEvent): void {
   domain.registrant = account.id;
   domain.expiryDate = event.params.expires.plus(GRACE_PERIOD_SECONDS);
 
-  let labelName = ens.nameByHash(label.toHexString());
-  if (checkValidLabel(labelName)) {
-    domain.labelName = labelName;
-    domain.name = labelName! + ".eth";
-    registration.labelName = labelName;
-  }
+//   let labelName = ens.nameByHash(label.toHexString());
+//   if (checkValidLabel(labelName)) {
+//     domain.labelName = labelName;
+//     domain.name = labelName! + ".lyx";
+//     registration.labelName = labelName;
+//   }
   domain.save();
   registration.save();
 
@@ -101,7 +101,7 @@ function setNamePreimage(name: string, label: Bytes, cost: BigInt): void {
   let domain = Domain.load(crypto.keccak256(concat(rootNode, label)).toHex())!;
   if (domain.labelName != name) {
     domain.labelName = name;
-    domain.name = name + ".eth";
+    domain.name = name + ".lyx";
     domain.save();
   }
 
@@ -113,7 +113,7 @@ function setNamePreimage(name: string, label: Bytes, cost: BigInt): void {
 }
 
 export function handleNameRenewed(event: NameRenewedEvent): void {
-  let label = uint256ToByteArray(event.params.id);
+  let label = event.params.id;
   let registration = Registration.load(label.toHex())!;
   let domain = Domain.load(crypto.keccak256(concat(rootNode, label)).toHex())!;
 
@@ -135,7 +135,7 @@ export function handleNameTransferred(event: TransferEvent): void {
   let account = new Account(event.params.to.toHex());
   account.save();
 
-  let label = uint256ToByteArray(event.params.tokenId);
+  let label = event.params.tokenId;
   let registration = Registration.load(label.toHex());
   if (registration == null) return;
 

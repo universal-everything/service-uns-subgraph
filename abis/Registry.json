@@ -51,7 +51,7 @@
            "type":"address"
         }
      ],
-     "name":"setSubnodeOwner",
+     "name":"setSubNameOwner",
      "outputs":[  
 
      ],
@@ -147,7 +147,7 @@
            "type":"address"
         }
      ],
-     "name":"Transfer",
+     "name":"OwnerChanged",
      "type":"event"
   },
   {  
@@ -169,7 +169,7 @@
            "type":"address"
         }
      ],
-     "name":"NewOwner",
+     "name":"SubnNameOwnerChanged",
      "type":"event"
   },
   {  
@@ -186,7 +186,7 @@
            "type":"address"
         }
      ],
-     "name":"NewResolver",
+     "name":"ResolverChanged",
      "type":"event"
   },
   {  
@@ -203,7 +203,7 @@
            "type":"uint64"
         }
      ],
-     "name":"NewTTL",
+     "name":"TTLChanged",
      "type":"event"
   }
 ]
