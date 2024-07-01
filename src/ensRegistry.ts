@@ -1,5 +1,5 @@
 // Import types and APIs from graph-ts
-import { BigInt, crypto, ens } from "@graphprotocol/graph-ts";
+import { BigInt, crypto } from "@graphprotocol/graph-ts";
 
 import {
   checkValidLabel,
@@ -12,10 +12,10 @@ import {
 
 // Import event types from the registry contract ABI
 import {
-  NewOwner as NewOwnerEvent,
-  NewResolver as NewResolverEvent,
-  NewTTL as NewTTLEvent,
-  Transfer as TransferEvent,
+  SubnNameOwnerChanged as NewOwnerEvent,
+  ResolverChanged as NewResolverEvent,
+  TTLChanged as NewTTLEvent,
+  OwnerChanged as TransferEvent,
 } from "./types/ENSRegistry/EnsRegistry";
 
 // Import entity types generated from the GraphQL schema
@@ -108,12 +108,7 @@ function _handleNewOwner(event: NewOwnerEvent, isMigrated: boolean): void {
 
   if (domain.name == null) {
     // Get label and node names
-    let label = ens.nameByHash(event.params.label.toHexString());
-    if (checkValidLabel(label)) {
-      domain.labelName = label;
-    } else {
-      label = "[" + event.params.label.toHexString().slice(2) + "]";
-    }
+    let label = "[" + event.params.label.toHexString().slice(2) + "]";
     if (
       event.params.node.toHexString() ==
       "0x0000000000000000000000000000000000000000000000000000000000000000"

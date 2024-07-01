@@ -10,9 +10,9 @@ dataSources:
     name: ENSRegistry
     network: mainnet
     source:
-      address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e"
+      address: "0x648497a80c0499BEb5e18965Ba45c9A8B809EB4e"
       abi: EnsRegistry
-      startBlock: 9380380
+      startBlock: 2925282
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -26,47 +26,48 @@ dataSources:
         - name: EnsRegistry
           file: ./abis/Registry.json
       eventHandlers:
-        - event: "Transfer(indexed bytes32,address)"
+        - event: "OwnerChanged(indexed bytes32,address)"
           handler: handleTransfer
-        - event: "NewOwner(indexed bytes32,indexed bytes32,address)"
+        - event: "SubnNameOwnerChanged(indexed bytes32,indexed bytes32,address)"
           handler: handleNewOwner
-        - event: "NewResolver(indexed bytes32,address)"
+        - event: "ResolverChanged(indexed bytes32,address)"
           handler: handleNewResolver
-        - event: "NewTTL(indexed bytes32,uint64)"
+        - event: "TTLChanged(indexed bytes32,uint64)"
           handler: handleNewTTL
-  - kind: ethereum/contract
-    name: ENSRegistryOld
-    network: mainnet
-    source:
-      address: "0x314159265dd8dbb310642f98f50c066173c1259b"
-      abi: EnsRegistry
-      startBlock: 3327417
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ./src/ensRegistry.ts
-      entities:
-        - Domain
-        - Account
-        - Resolver
-      abis:
-        - name: EnsRegistry
-          file: ./abis/Registry.json
-      eventHandlers:
-        - event: "Transfer(indexed bytes32,address)"
-          handler: handleTransferOldRegistry
-        - event: "NewOwner(indexed bytes32,indexed bytes32,address)"
-          handler: handleNewOwnerOldRegistry
-        - event: "NewResolver(indexed bytes32,address)"
-          handler: handleNewResolverOldRegistry
-        - event: "NewTTL(indexed bytes32,uint64)"
-          handler: handleNewTTLOldRegistry
+  # - kind: ethereum/contract
+  #   name: ENSRegistryOld
+  #   network: mainnet
+  #   source:
+  #     address: "0x314159265dd8dbb310642f98f50c066173c1259b"
+  #     abi: EnsRegistry
+  #     startBlock: 3327417
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.6
+  #     language: wasm/assemblyscript
+  #     file: ./src/ensRegistry.ts
+  #     entities:
+  #       - Domain
+  #       - Account
+  #       - Resolver
+  #     abis:
+  #       - name: EnsRegistry
+  #         file: ./abis/Registry.json
+  #     eventHandlers:
+  #       - event: "Transfer(indexed bytes32,address)"
+  #         handler: handleTransferOldRegistry
+  #       - event: "NewOwner(indexed bytes32,indexed bytes32,address)"
+  #         handler: handleNewOwnerOldRegistry
+  #       - event: "NewResolver(indexed bytes32,address)"
+  #         handler: handleNewResolverOldRegistry
+  #       - event: "NewTTL(indexed bytes32,uint64)"
+  #         handler: handleNewTTLOldRegistry
   - kind: ethereum/contract
     name: Resolver
     network: mainnet
     source:
       abi: Resolver
+      startBlock: 2925304
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -114,9 +115,9 @@ dataSources:
     name: BaseRegistrar
     network: mainnet
     source:
-      address: "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85"
+      address: "0x1c295D9F10d6Ca6FFBF5c71Edc03ef4dFB06a3B9"
       abi: BaseRegistrar
-      startBlock: 9380410
+      startBlock: 2925304
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -131,19 +132,19 @@ dataSources:
         - name: BaseRegistrar
           file: ./abis/BaseRegistrar.json
       eventHandlers:
-        - event: "NameRegistered(indexed uint256,indexed address,uint256)"
+        - event: "NameRegistered(indexed bytes32,indexed address,uint256)"
           handler: handleNameRegistered
-        - event: "NameRenewed(indexed uint256,uint256)"
+        - event: "NameRenewed(indexed bytes32,uint256)"
           handler: handleNameRenewed
-        - event: "Transfer(indexed address,indexed address,indexed uint256)"
+        - event: Transfer(address,indexed address,indexed address,indexed bytes32,bool,bytes)
           handler: handleNameTransferred
   - kind: ethereum/contract
     name: EthRegistrarControllerOld
     network: mainnet
     source:
-      address: "0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5"
+      address: "0xbF15DE6e136fC13A79f8D59206f2BF12e12c4632"
       abi: EthRegistrarControllerOld
-      startBlock: 9380471
+      startBlock: 2925307
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -159,59 +160,59 @@ dataSources:
             NameRegistered(string,indexed bytes32,indexed
             address,uint256,uint256)
           handler: handleNameRegisteredByControllerOld
-        - event: "NameRenewed(string,indexed bytes32,uint256,uint256)"
-          handler: handleNameRenewedByController
-  - kind: ethereum/contract
-    name: EthRegistrarController
-    network: mainnet
-    source:
-      address: "0x253553366Da8546fC250F225fe3d25d0C782303b"
-      abi: EthRegistrarController
-      startBlock: 16925618
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ./src/ethRegistrar.ts
-      entities:
-        - Registration
-      abis:
-        - name: EthRegistrarController
-          file: ./abis/EthRegistrarController.json
-      eventHandlers:
-        - event: >-
-            NameRegistered(string,indexed bytes32,indexed
-            address,uint256,uint256,uint256)
-          handler: handleNameRegisteredByController
-        - event: "NameRenewed(string,indexed bytes32,uint256,uint256)"
-          handler: handleNameRenewedByController
-  - kind: ethereum/contract
-    name: NameWrapper
-    network: mainnet
-    source:
-      address: "0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401"
-      abi: NameWrapper
-      startBlock: 16925608
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ./src/nameWrapper.ts
-      entities:
-        - NameWrapper
-      abis:
-        - name: NameWrapper
-          file: ./abis/NameWrapper.json
-      eventHandlers:
-        - event: "NameWrapped(indexed bytes32,bytes,address,uint32,uint64)"
-          handler: handleNameWrapped
-        - event: "NameUnwrapped(indexed bytes32,address)"
-          handler: handleNameUnwrapped
-        - event: "FusesSet(indexed bytes32,uint32)"
-          handler: handleFusesSet
-        - event: "ExpiryExtended(indexed bytes32,uint64)"
-          handler: handleExpiryExtended
-        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleTransferSingle
-        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
-          handler: handleTransferBatch
+        # - event: "NameRenewed(string,indexed bytes32,uint256,uint256)"
+        #   handler: handleNameRenewedByController
+  # - kind: ethereum/contract
+  #   name: EthRegistrarController
+  #   network: mainnet
+  #   source:
+  #     address: "0x253553366Da8546fC250F225fe3d25d0C782303b"
+  #     abi: EthRegistrarController
+  #     startBlock: 16925618
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.6
+  #     language: wasm/assemblyscript
+  #     file: ./src/ethRegistrar.ts
+  #     entities:
+  #       - Registration
+  #     abis:
+  #       - name: EthRegistrarController
+  #         file: ./abis/EthRegistrarController.json
+  #     eventHandlers:
+  #       - event: >-
+  #           NameRegistered(string,indexed bytes32,indexed
+  #           address,uint256,uint256,uint256)
+  #         handler: handleNameRegisteredByController
+  #       - event: "NameRenewed(string,indexed bytes32,uint256,uint256)"
+  #         handler: handleNameRenewedByController
+  # - kind: ethereum/contract
+  #   name: NameWrapper
+  #   network: mainnet
+  #   source:
+  #     address: "0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401"
+  #     abi: NameWrapper
+  #     startBlock: 16925608
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.6
+  #     language: wasm/assemblyscript
+  #     file: ./src/nameWrapper.ts
+  #     entities:
+  #       - NameWrapper
+  #     abis:
+  #       - name: NameWrapper
+  #         file: ./abis/NameWrapper.json
+  #     eventHandlers:
+  #       - event: "NameWrapped(indexed bytes32,bytes,address,uint32,uint64)"
+  #         handler: handleNameWrapped
+  #       - event: "NameUnwrapped(indexed bytes32,address)"
+  #         handler: handleNameUnwrapped
+  #       - event: "FusesSet(indexed bytes32,uint32)"
+  #         handler: handleFusesSet
+  #       - event: "ExpiryExtended(indexed bytes32,uint64)"
+  #         handler: handleExpiryExtended
+  #       - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+  #         handler: handleTransferSingle
+  #       - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+  #         handler: handleTransferBatch
